@@ -43,12 +43,12 @@ export const StorySection = () => {
             de Nós para <span className="text-honey">Você</span>.
           </h2>
           <p className="text-xl text-cream/70 font-sans font-light leading-relaxed mb-10">
-            A Bee Decoração e Arte nasceu de um sonho compartilhado entre mãe e filhas. Cada amigurumi que sai do nosso ateliê carrega consigo horas de dedicação, pontos precisos e, acima de tudo, muito amor.
+            A Bee Decoração e Arte nasceu do amor passado de mãe para filhas. Cada amigurumi que sai do nosso ateliê carrega consigo o legado dessa arte manual, transformando fios em memórias afetivas.
           </p>
           <div className="grid grid-cols-2 gap-8 border-t border-white/10 pt-10">
             <div>
-              <h4 className="text-honey text-3xl font-bold mb-2">5+</h4>
-              <p className="text-cream/50 text-sm uppercase tracking-widest">Anos de Experiência</p>
+              <h4 className="text-honey text-3xl font-bold mb-2">1+</h4>
+              <p className="text-cream/50 text-sm uppercase tracking-widest">Ano de História</p>
             </div>
             <div>
               <h4 className="text-honey text-3xl font-bold mb-2">1k+</h4>

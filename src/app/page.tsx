@@ -1,9 +1,12 @@
+"use client"
+
 import { Navbar } from "@/components/navbar";
 import { Hero } from "@/components/hero";
 import { FeaturedProducts } from "@/components/featured-products";
 import { StorySection } from "@/components/story-section";
 import { Footer } from "@/components/footer";
 import { Gift, Box, ArrowRight, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 
 export default function Home() {
@@ -62,27 +65,68 @@ export default function Home() {
       
       {/* Testimonials */}
       <section className="py-24 bg-cream overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="font-heading text-4xl font-bold text-primary mb-12">O que dizem nossos clientes</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white p-10 rounded-[40px] shadow-sm border border-border/50 hover:shadow-xl transition-shadow duration-500">
-                <div className="flex text-honey mb-6 justify-center">
-                  {[...Array(5)].map((_, star) => <Sparkles key={star} className="w-4 h-4 fill-current" />)}
-                </div>
-                <p className="text-muted-foreground italic mb-8 leading-relaxed">
-                  "O amigurumi que comprei é simplesmente maravilhoso. O acabamento é perfeito e dá para sentir o carinho em cada ponto. Uma verdadeira obra de arte."
-                </p>
-                <div className="flex items-center justify-center gap-4">
-                  <div className="w-12 h-12 bg-pastel-blue/20 rounded-full flex items-center justify-center font-bold text-primary">M</div>
-                  <div className="text-left">
-                    <p className="font-bold text-primary text-sm">Maria Silva</p>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Cliente Verificada</p>
+        <div className="max-w-7xl mx-auto px-6 text-center mb-16">
+          <h2 className="font-heading text-4xl font-bold text-primary">O que dizem nossos clientes</h2>
+        </div>
+
+        {/* Infinite Scroll Container */}
+        <div className="relative flex overflow-hidden py-10">
+          <motion.div 
+            className="flex gap-8 whitespace-nowrap"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ 
+              duration: 40, 
+              repeat: Infinity, 
+              ease: "linear" 
+            }}
+          >
+            {[...Array(2)].map((_, listIdx) => (
+              <div key={listIdx} className="flex gap-8">
+                {[
+                  {
+                    name: "Juliana Mendes",
+                    text: "O amigurumi é simplesmente maravilhoso! O acabamento é perfeito e dá para sentir o carinho em cada ponto. Uma verdadeira obra de arte.",
+                    initial: "J"
+                  },
+                  {
+                    name: "Ricardo Alves",
+                    text: "Comprei para presentear e a pessoa ficou encantada. A qualidade do material e o cuidado com a embalagem mostram o profissionalismo do ateliê.",
+                    initial: "R"
+                  },
+                  {
+                    name: "Camila Rocha",
+                    text: "Minha encomenda chegou dentro do prazo e superou todas as expectativas. É muito mais lindo de perto! Com certeza comprarei mais vezes.",
+                    initial: "C"
+                  },
+                  {
+                    name: "Fernanda Lima",
+                    text: "Atendimento impecável! Tiraram todas as minhas dúvidas e o resultado final ficou exatamente como eu imaginei. Recomendo muito!",
+                    initial: "F"
+                  }
+                ].map((review, i) => (
+                  <div key={`${listIdx}-${i}`} className="inline-block w-[350px] md:w-[450px] bg-white p-10 rounded-[40px] shadow-sm border border-border/50 hover:shadow-xl transition-shadow duration-500 whitespace-normal">
+                    <div className="flex text-honey mb-6 justify-center">
+                      {[...Array(5)].map((_, star) => <Sparkles key={star} className="w-4 h-4 fill-current" />)}
+                    </div>
+                    <p className="text-muted-foreground italic mb-8 leading-relaxed text-sm md:text-base">
+                      "{review.text}"
+                    </p>
+                    <div className="flex items-center justify-center gap-4">
+                      <div className="w-12 h-12 bg-pastel-blue/20 rounded-full flex items-center justify-center font-bold text-primary">{review.initial}</div>
+                      <div className="text-left">
+                        <p className="font-bold text-primary text-sm">{review.name}</p>
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Cliente Verificado(a)</p>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             ))}
-          </div>
+          </motion.div>
+
+          {/* Gradient Overlays for Fade Effect */}
+          <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-cream to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-cream to-transparent z-10 pointer-events-none" />
         </div>
       </section>
 
