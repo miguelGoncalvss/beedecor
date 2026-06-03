@@ -1,26 +1,184 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-sans: var(--font-sans);
+  --font-heading: var(--font-heading);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-honey: #F4B942;
+  --color-honey-dark: #D49B22;
+  --color-purple-deep: #4B1366;
+  --color-cream: #FFF7EA;
+  --color-pastel-blue: #C8E6F0;
+  
+  --radius-pill: 9999px;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-sm: calc(var(--radius) * 0.6);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --animate-spin-slow: spin-slow 12s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+:root {
+  /* LIGHT TRACK: Transactional */
+  --background: #FFF7EA; /* Soft Cream */
+  --foreground: #111111; /* Soft Black */
+  
+  --card: #FFFFFF;
+  --card-foreground: #111111;
+  
+  --popover: #FFFFFF;
+  --popover-foreground: #111111;
+  
+  --primary: #4B1366; /* Deep Purple as primary */
+  --primary-foreground: #FFF7EA;
+  
+  --secondary: #F4B942; /* Honey Gold */
+  --secondary-foreground: #4B1366;
+  
+  --muted: #F5EFE6;
+  --muted-foreground: #666666;
+  
+  --accent: #C8E6F0; /* Pastel Blue */
+  --accent-foreground: #4B1366;
+  
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #E8DCC4;
+  --input: #E8DCC4;
+  --ring: #F4B942;
+  
+  --radius: 1rem;
+}
+
+.dark {
+  /* DARK TRACK: Cinematic */
+  --background: #4B1366; /* Deep Royal Purple */
+  --foreground: #FFF7EA; /* Soft Cream */
+  
+  --card: rgba(75, 19, 102, 0.5);
+  --card-foreground: #FFF7EA;
+  
+  --popover: #4B1366;
+  --popover-foreground: #FFF7EA;
+  
+  --primary: #F4B942; /* Honey Gold as primary in dark mode */
+  --primary-foreground: #4B1366;
+  
+  --secondary: #C8E6F0;
+  --secondary-foreground: #4B1366;
+  
+  --muted: rgba(255, 255, 255, 0.1);
+  --muted-foreground: #C8E6F0;
+  
+  --accent: #F4B942;
+  --accent-foreground: #4B1366;
+  
+  --border: rgba(244, 185, 66, 0.2);
+  --input: rgba(244, 185, 66, 0.2);
+  --ring: #F4B942;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground transition-colors duration-700;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Custom Scrollbar Global */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(244, 185, 66, 0.3);
+    border-radius: 20px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+    transition: background-color 0.3s;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(244, 185, 66, 1);
+  }
+
+  /* Firefox support */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #F4B942 transparent;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+  
+  .honeycomb-grid {
+    background-image: radial-gradient(circle at 2px 2px, rgba(244, 185, 66, 0.1) 1px, transparent 0);
+    background-size: 24px 24px;
+  }
+  
+  .text-glow {
+    text-shadow: 0 0 10px rgba(244, 185, 66, 0.5);
+  }
+  
+  .honey-gradient {
+    background: linear-gradient(135deg, #F4B942 0%, #D49B22 100%);
+  }
+
+  .clip-hexagon {
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(244, 185, 66, 0.5);
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #F4B942;
+  }
 }

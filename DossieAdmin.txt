@@ -1,0 +1,45 @@
+# DOSSIÊ TÉCNICO: MÓDULO ADMINISTRATIVO - BEE DECORAÇÃO E ARTE (REFATORADO)
+
+## 1. Visão Geral do Sistema
+O módulo administrativo (/admin) é um CMS (Content Management System) imersivo e simplificado, focado na agilidade da gestão artesanal. Ele utiliza a estética "Midnight Atelier" (Roxo Profundo e Ouro Mel) e foi otimizado para o estágio atual do negócio, removendo métricas complexas e priorizando a gestão de catálogo.
+
+## 2. Arquitetura e Tecnologias
+- **Framework:** Next.js 15+ (App Router).
+- **Gerenciamento de Estado:** Zustand (Auth) & React Query (Data Fetching).
+- **Autenticação:** Firebase Auth.
+- **Banco de Dados:** Firebase Firestore.
+- **Armazenamento de Mídia:** Cloudinary.
+- **Estilização:** Tailwind CSS v4 & Framer Motion.
+
+## 3. Detalhamento das Páginas
+
+### 3.1. Dashboard (Boas-Vindas)
+- **Interface:** Saudação personalizada e exibição de data/hora atual.
+- **Acesso Rápido:** 4 cards de atalho para as principais funções (Produtos, Coleções, Categorias, Configurações).
+- **Resumo em Tempo Real:** Contador de produtos ativos, coleções e categorias buscados diretamente do Firestore.
+
+### 3.2. Produtos (Gestão de Catálogo)
+- **Status Visual:** Badges coloridos (Ativo/Esgotado/Rascunho) visíveis em todas as listas.
+- **Simplificação:** Removido o controle de quantidade de estoque (stock), mantendo apenas o status de disponibilidade.
+- **Categorização Dinâmica:** O campo de categoria no cadastro agora é alimentado em tempo real pelo módulo de Categorias.
+- **Visualização:** Tabela desktop e Cards mobile com suporte total a touch.
+
+### 3.3. Categorias (NOVO)
+- **Funcionalidade:** Gestão dinâmica dos segmentos do catálogo.
+- **Slug Automático:** Geração automática de slugs (ex: "Bebês" -> "bebes") para URLs amigáveis.
+- **Impacto Global:** Categorias criadas aqui aparecem instantaneamente nos filtros do catálogo público e no cadastro de produtos.
+
+### 3.4. Coleções
+- **Funcionalidade:** Agrupamento temático de produtos com imagens de capa cinematográficas.
+
+### 3.5. Configurações (Canais de Contato)
+- **Simplificado:** Focado exclusivamente nos canais de atendimento direto.
+- **Campos:** WhatsApp (DDI+DDD), Instagram e E-mail comercial.
+
+## 4. Lógica de Dados e Segurança
+- **Firebase Service:** Centraliza as mutações de Firestore com geração de slugs e timestamps automáticos.
+- **Security Rules:** Coleção `categorias` protegida com leitura pública e escrita restrita a administradores.
+- **Hooks:** Hooks dedicados (`useCategories`, `useProducts`, etc.) com invalidação automática de cache via React Query.
+
+---
+*Dossiê atualizado por Gemini CLI em 27 de Maio de 2026 após a Grande Refatoração do Admin.*

@@ -1,65 +1,92 @@
-import Image from "next/image";
+import { Navbar } from "@/components/navbar";
+import { Hero } from "@/components/hero";
+import { FeaturedProducts } from "@/components/featured-products";
+import { StorySection } from "@/components/story-section";
+import { Footer } from "@/components/footer";
+import { Gift, Box, ArrowRight, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen">
+      <Navbar />
+      <Hero />
+
+      {/* Entry Points with Isolated Groups */}
+      <section className="py-24 bg-cream overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Gift Finder Entry */}
+            <Link href="/presente" className="group/entry-gift">
+              <div className="relative h-80 rounded-[48px] overflow-hidden bg-purple-deep flex items-center p-12 transition-transform duration-700 hover:scale-[1.02]">
+                <div className="relative z-10 space-y-6">
+                  <div className="w-16 h-16 bg-honey/20 rounded-2xl flex items-center justify-center text-honey border border-honey/30">
+                    <Gift className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-heading text-xl md:text-3xl font-bold text-white mb-2">Descoberta de Presente</h3>
+                    <p className="text-cream/60 max-w-xs">Deixe a magia te guiar até o amigurumi perfeito para quem você ama.</p>
+                  </div>
+                  <div className="flex items-center gap-2 text-honey font-bold uppercase tracking-widest text-xs">
+                    Começar Jornada <ArrowRight className="w-4 h-4 transition-transform group-hover/entry-gift:translate-x-2" />
+                  </div>
+                </div>
+                <div className="absolute top-0 right-0 w-1/2 h-full bg-honey/5 clip-hexagon rotate-12 translate-x-1/4" />
+              </div>
+            </Link>
+
+            {/* Collections Entry */}
+            <Link href="/colecoes" className="group/entry-col">
+              <div className="relative h-80 rounded-[48px] overflow-hidden bg-white border border-border/50 flex items-center p-12 transition-transform duration-700 hover:scale-[1.02] shadow-sm hover:shadow-xl">
+                <div className="relative z-10 space-y-6">
+                  <div className="w-16 h-16 bg-pastel-blue/20 rounded-2xl flex items-center justify-center text-primary border border-pastel-blue/30">
+                    <Box className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-heading text-xl md:text-3xl font-bold text-primary mb-2">Nossas Coleções</h3>
+                    <p className="text-muted-foreground max-w-xs">Mergulhe em universos temáticos curados com carinho.</p>
+                  </div>
+                  <div className="flex items-center gap-2 text-secondary font-bold uppercase tracking-widest text-xs">
+                    Explorar Mundos <ArrowRight className="w-4 h-4 transition-transform group-hover/entry-col:translate-x-2" />
+                  </div>
+                </div>
+                <div className="absolute bottom-0 right-0 w-1/3 h-1/2 bg-pastel-blue/10 clip-hexagon -rotate-12 translate-y-1/4" />
+              </div>
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <FeaturedProducts />
+      <StorySection />
+      
+      {/* Testimonials */}
+      <section className="py-24 bg-cream overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="font-heading text-4xl font-bold text-primary mb-12">O que dizem nossos clientes</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-white p-10 rounded-[40px] shadow-sm border border-border/50 hover:shadow-xl transition-shadow duration-500">
+                <div className="flex text-honey mb-6 justify-center">
+                  {[...Array(5)].map((_, star) => <Sparkles key={star} className="w-4 h-4 fill-current" />)}
+                </div>
+                <p className="text-muted-foreground italic mb-8 leading-relaxed">
+                  "O amigurumi que comprei é simplesmente maravilhoso. O acabamento é perfeito e dá para sentir o carinho em cada ponto. Uma verdadeira obra de arte."
+                </p>
+                <div className="flex items-center justify-center gap-4">
+                  <div className="w-12 h-12 bg-pastel-blue/20 rounded-full flex items-center justify-center font-bold text-primary">M</div>
+                  <div className="text-left">
+                    <p className="font-bold text-primary text-sm">Maria Silva</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Cliente Verificada</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <Footer />
+    </main>
   );
 }
