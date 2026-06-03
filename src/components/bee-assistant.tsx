@@ -67,7 +67,7 @@ const itemVariants = {
     filter: 'blur(8px)',
     transition: { duration: 0.1 }
   }
-}
+} as const
 
 export const BeeAssistant = () => {
   const router = useRouter()
@@ -264,7 +264,7 @@ export const BeeAssistant = () => {
   const MelBeeIcon = ({ className = "w-10 h-10" }: { className?: string }) => (
     <svg viewBox="0 0 40 40" className={className}>
       {/* Glow shadow */}
-      <circle cx="20" cy="22" r="8" fill="rgba(0,0,0,0.1)" blur="2px" />
+      <circle cx="20" cy="22" r="8" fill="rgba(0,0,0,0.1)" />
       
       {/* Wings */}
       <motion.path

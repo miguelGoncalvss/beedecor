@@ -19,6 +19,7 @@ export interface AdminProduct {
   status: 'active' | 'out_of_stock' | 'draft';
   imageUrl: string;
   collection?: string;
+  colecoes?: string[];
   tags: string[];
   moods?: string[];
   giftFor?: string[];

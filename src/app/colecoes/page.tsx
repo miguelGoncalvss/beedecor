@@ -74,7 +74,7 @@ export default function CollectionsPage() {
                     <div className="w-full lg:w-1/2 relative">
                       <div className="aspect-[16/9] rounded-[48px] overflow-hidden shadow-2xl border-8 border-white group-hover/collection:scale-[1.02] transition-transform duration-700">
                         <img
-                          src={col.imagem || '/pics/io_personagemUrsihopoo.jpg'}
+                          src={col.capa || '/pics/io_personagemUrsihopoo.jpg'}
                           alt={col.nome}
                           className="w-full h-full object-cover"
                         />
