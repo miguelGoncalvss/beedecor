@@ -5,7 +5,7 @@ import path from "path";
 dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 
 import { db } from "../lib/firebase";
-import { collection, addDoc, serverTimestamp, setDoc, doc, getDocs, query, where } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, setDoc, doc, getDocs, getDoc, query, where } from "firebase/firestore";
 
 /**
  * Script para popular o Firestore com dados iniciais (Seed)
