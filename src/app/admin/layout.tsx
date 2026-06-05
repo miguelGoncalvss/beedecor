@@ -13,7 +13,8 @@ import {
   LogOut, 
   Menu,
   X,
-  Hexagon
+  Hexagon,
+  MessageCircle
 } from 'lucide-react'
 import { useAdminStore } from '@/lib/admin-store'
 import { Logo } from '@/components/ui/logo'
@@ -25,6 +26,7 @@ const adminLinks = [
   { name: 'Produtos', href: '/admin/produtos', icon: Package },
   { name: 'Coleções', href: '/admin/colecoes', icon: FolderHeart },
   { name: 'Categorias', href: '/admin/categorias', icon: Tag },
+  { name: 'Assistente Mel', href: '/admin/mel', icon: MessageCircle },
   { name: 'Configurações', href: '/admin/configuracoes', icon: Settings },
 ]
 

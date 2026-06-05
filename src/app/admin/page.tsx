@@ -8,7 +8,8 @@ import {
   Tag, 
   Settings, 
   ArrowRight,
-  Sparkles
+  Sparkles,
+  MessageCircle
 } from 'lucide-react'
 import Link from 'next/link'
 import { useAdminAuth } from '@/lib/firebase-admin-auth'
@@ -181,7 +182,29 @@ export default function AdminDashboardPage() {
           </motion.div>
         </Link>
 
-        {/* Card 4 — Configurações */}
+        {/* Card 4 — Assistente Mel */}
+        <Link href="/admin/mel">
+          <motion.div
+            whileHover={{ y: -5, scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="group relative p-8 rounded-[32px] bg-card border border-amber-400/10 hover:border-amber-400/40 shadow-sm hover:shadow-amber-400/10 transition-all overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/5 rounded-full blur-[40px] -mr-10 -mt-10 opacity-30 group-hover:opacity-60 transition-opacity" />
+            <div className="relative z-10 space-y-4">
+              <div className="w-14 h-14 rounded-2xl bg-amber-400/10 flex items-center justify-center text-honey border border-amber-400/20">
+                <MessageCircle className="w-7 h-7" />
+              </div>
+              <div>
+                <h3 className="text-xl font-heading font-bold text-foreground">Assistente Mel</h3>
+                <p className="text-sm text-muted-foreground flex items-center gap-2 mt-1">
+                  Gerenciar agora <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </Link>
+
+        {/* Card 5 — Configurações */}
         <Link href="/admin/configuracoes">
           <motion.div
             whileHover={{ y: -5, scale: 1.02 }}

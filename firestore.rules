@@ -26,5 +26,11 @@ service cloud.firestore {
         && request.auth.uid == 'krdjP8prMzf2IxpeT9juOUnA0xN2';
     }
 
+    match /mel_fluxo/{id} {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.auth.uid == 'krdjP8prMzf2IxpeT9juOUnA0xN2';
+    }
+
   }
 }

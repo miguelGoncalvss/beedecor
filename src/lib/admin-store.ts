@@ -60,6 +60,23 @@ export interface AdminSettings {
   email: string;
 }
 
+export interface MelOption {
+  id: string;
+  icone: string;
+  label: string;
+  proximo?: string;
+  acao?: string;
+}
+
+export interface MelNode {
+  id: string;
+  mensagem: string;
+  opcoes: MelOption[];
+  ativo: boolean;
+  admin: boolean;
+  criadoEm?: any;
+}
+
 interface AdminState {
   user: AdminUser | null;
   products: AdminProduct[];

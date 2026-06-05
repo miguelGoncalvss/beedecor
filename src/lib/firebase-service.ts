@@ -14,7 +14,7 @@ import {
   setDoc
 } from "firebase/firestore";
 import { db } from "./firebase";
-import { AdminProduct, AdminCollection, AdminSettings, AdminCategory } from "./admin-store";
+import { AdminProduct, AdminCollection, AdminSettings, AdminCategory, MelNode } from "./admin-store";
 
 // Helper for slugs
 const generateSlug = (text: string) => {
@@ -250,4 +250,40 @@ export const getPublicProductById = async (id: string): Promise<PublicProduct | 
     return mapProductToPublic(product);
   }
   return null;
+};
+
+// --- Assistente Mel (Fluxo) ---
+
+export const getMelFluxo = async (): Promise<MelNode[]> => {
+  console.log("🔍 Buscando fluxo da Mel...");
+  const q = query(getCol("mel_fluxo"), orderBy("criadoEm", "asc"));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  } as MelNode));
+};
+
+export const updateMelNode = async (id: string, data: Partial<MelNode>): Promise<void> => {
+  console.log(`📝 Atualizando nó da Mel: ${id}...`);
+  const docRef = doc(db, "mel_fluxo", id);
+  await updateDoc(docRef, data);
+};
+
+export const createMelNode = async (data: MelNode): Promise<string> => {
+  console.log(`📝 Criando novo nó da Mel: ${data.id}...`);
+  const docRef = doc(db, "mel_fluxo", data.id);
+  
+  // Use setDoc to support custom IDs
+  await setDoc(docRef, {
+    ...data,
+    criadoEm: serverTimestamp()
+  });
+  return data.id;
+};
+
+export const deleteMelNode = async (id: string): Promise<void> => {
+  console.log(`🗑️ Excluindo nó da Mel: ${id}...`);
+  const docRef = doc(db, "mel_fluxo", id);
+  await deleteDoc(docRef);
 };

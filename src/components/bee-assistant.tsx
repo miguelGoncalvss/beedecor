@@ -6,11 +6,12 @@ import { X, MessageCircle, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { usePathname, useRouter } from 'next/navigation'
 import { useBeeStore } from '@/lib/store'
+import { useMelFluxo } from '@/hooks/use-mel-fluxo'
+import { useSettings } from '@/hooks/use-settings'
 
 // --- Types & Flow Logic ---
 
-type NodeType = 'inicio' | 'produtos' | 'catalogo' | 'presente' | 'encomenda' | 'prazo' | 'entrega' | 'contato' | 
-                'admin_inicio' | 'admin_dicas' | 'admin_dica_destaque'
+type NodeType = string
 
 interface Option {
   label: string
@@ -31,6 +32,26 @@ const adminMessagesByPath: Record<string, string> = {
   '/admin/colecoes': 'Coleções bem organizadas ajudam os clientes a encontrar o presente perfeito! 🎁',
   '/admin/categorias': 'Categorias aparecem nos filtros do catálogo automaticamente! 🏷️',
   '/admin/configuracoes': 'Mantenha o WhatsApp sempre atualizado — é por lá que chegam os pedidos! 📱',
+}
+
+// Fallback nodes for when Firestore is not available
+const fallbackNodes: Record<string, Node> = {
+  inicio: {
+    message: "Olá! Sou a Mel, assistente do Bee Ateliê! 🐝 Como posso te ajudar hoje?",
+    options: [
+      { label: "Ver nossos produtos", icon: "🧶", next: 'produtos' },
+      { label: "Fazer uma encomenda", icon: "🎁", next: 'encomenda' },
+      { label: "Prazo e entrega", icon: "📦", next: 'prazo' },
+      { label: "Falar com uma artesã", icon: "💬", next: 'contato' },
+    ]
+  },
+  admin_inicio: {
+    message: "Olá! Sou a Mel, sua assistente do ateliê. 🐝\nPara onde quer ir?",
+    options: [
+      { label: "Gerenciar Produtos", icon: "🧶", next: 'admin_produtos' },
+      { label: "Ver dicas rápidas", icon: "💡", next: 'admin_dicas' }
+    ]
+  }
 }
 
 const containerVariants = {
@@ -73,6 +94,8 @@ export const BeeAssistant = () => {
   const router = useRouter()
   const pathname = usePathname()
   const { cart } = useBeeStore()
+  const { data: melFluxo = [] } = useMelFluxo()
+  const { data: settings } = useSettings()
   const prevCartLength = useRef(0)
 
   // Core UI State
@@ -88,98 +111,37 @@ export const BeeAssistant = () => {
 
   const isAdminMode = pathname.startsWith('/admin')
 
-  // Conversation State Machine Definitions
-  const nodes: Record<NodeType, Node> = {
-    inicio: {
-      message: "Olá! Sou a Mel, assistente do Bee Ateliê! 🐝 Como posso te ajudar hoje?",
-      options: [
-        { label: "Ver nossos produtos", icon: "🧶", next: 'produtos' },
-        { label: "Fazer uma encomenda", icon: "🎁", next: 'encomenda' },
-        { label: "Prazo e entrega", icon: "📦", next: 'prazo' },
-        { label: "Falar com uma artesã", icon: "💬", next: 'contato' },
-      ]
-    },
-    produtos: {
-      message: "Temos peças lindas feitas com muito amor! O que você está procurando?",
-      options: [
-        { label: "Animais e Pets", icon: "🐾", next: 'catalogo' },
-        { label: "Personagens", icon: "👸", next: 'catalogo' },
-        { label: "Religiosos", icon: "🙏", next: 'catalogo' },
-        { label: "Quero uma surpresa!", icon: "🎀", next: 'presente' },
-      ]
-    },
-    catalogo: {
-      message: "Que ótimo gosto! Vou te levar direto para o nosso catálogo. 🌟",
-      options: [
-        { label: "Ver catálogo completo", icon: "👀", action: () => { router.push('/catalogo'); setIsOpen(false); } },
-        { label: "Voltar ao início", icon: "🔙", next: 'inicio' },
-      ]
-    },
-    presente: {
-      message: "Deixa eu te ajudar a encontrar o presente perfeito! ✨",
-      options: [
-        { label: "Usar o buscador de presentes", icon: "🎯", action: () => { router.push('/presente'); setIsOpen(false); } },
-        { label: "Voltar ao início", icon: "🔙", next: 'inicio' },
-      ]
-    },
-    encomenda: {
-      message: "Adoramos fazer peças personalizadas! Cada amigurumi é único e feito com carinho. 🧶 Como prefere continuar?",
-      options: [
-        { label: "Chamar no WhatsApp", icon: "📱", action: () => window.open('https://wa.me/5511999999999', '_blank') },
-        { label: "Ver o catálogo primeiro", icon: "🛍️", action: () => { router.push('/catalogo'); setIsOpen(false); } },
-        { label: "Voltar ao início", icon: "🔙", next: 'inicio' },
-      ]
-    },
-    prazo: {
-      message: "Cada peça é feita à mão com muito carinho, por isso o prazo médio é de 7 a 15 dias úteis após a confirmação. 📦 Mais alguma dúvida?",
-      options: [
-        { label: "Como funciona a entrega?", icon: "📦", next: 'entrega' },
-        { label: "Falar com uma artesã", icon: "💬", next: 'contato' },
-        { label: "Voltar ao início", icon: "🔙", next: 'inicio' },
-      ]
-    },
-    entrega: {
-      message: "Enviamos para todo o Brasil pelos Correios e transportadoras parceiras. O frete é calculado no momento da encomenda! 🚚",
-      options: [
-        { label: "Quero fazer uma encomenda", icon: "🎁", next: 'encomenda' },
-        { label: "Voltar ao início", icon: "🔙", next: 'inicio' },
-      ]
-    },
-    contato: {
-      message: "Nossas artesãs adoram conversar with você! Escolha como prefere falar:",
-      options: [
-        { label: "WhatsApp", icon: "📱", action: () => window.open('https://wa.me/5511999999999', '_blank') },
-        { label: "Instagram", icon: "📸", action: () => window.open('https://instagram.com/beedecoracaoearte', '_blank') },
-        { label: "Voltar ao início", icon: "🔙", next: 'inicio' },
-      ]
-    },
-    // --- Admin Nodes ---
-    admin_inicio: {
-      message: "Olá! Sou a Mel, sua assistente do ateliê. 🐝\nPara onde quer ir?",
-      options: [
-        { label: "Gerenciar Produtos", icon: "🧶", action: () => { router.push('/admin/produtos'); setIsOpen(false); } },
-        { label: "Coleções", icon: "📂", action: () => { router.push('/admin/colecoes'); setIsOpen(false); } },
-        { label: "Categorias", icon: "🏷️", action: () => { router.push('/admin/categorias'); setIsOpen(false); } },
-        { label: "Configurações", icon: "⚙️", action: () => { router.push('/admin/configuracoes'); setIsOpen(false); } },
-        { label: "Ver dicas rápidas", icon: "💡", next: 'admin_dicas' }
-      ]
-    },
-    admin_dicas: {
-      message: "Aqui vão algumas dicas rápidas para o ateliê! ✨",
-      options: [
-        { label: "Como destacar produtos?", icon: "⭐", next: 'admin_dica_destaque' },
-        { label: "Atualizar WhatsApp", icon: "📱", action: () => { router.push('/admin/configuracoes'); setIsOpen(false); } },
-        { label: "Voltar", icon: "🔙", next: 'admin_inicio' }
-      ]
-    },
-    admin_dica_destaque: {
-      message: "Na página de Produtos, abra qualquer produto e ative a estrela de Destaque ⭐ — ele aparece automaticamente na seção principal da Home!",
-      options: [
-        { label: "Ir para Produtos", icon: "🧶", action: () => { router.push('/admin/produtos'); setIsOpen(false); } },
-        { label: "Voltar", icon: "🔙", next: 'admin_inicio' }
-      ]
+  // Resolve actions by string
+  const resolveAcao = (acao: string) => {
+    const acoes: Record<string, () => void> = {
+      whatsapp: () => window.open(`https://wa.me/${settings?.whatsapp?.replace(/\D/g, '') || '5511999999999'}`, '_blank'),
+      instagram: () => window.open(`https://instagram.com/${settings?.instagram?.replace('@', '') || 'beedecoracaoearte'}`, '_blank'),
+      catalogo: () => { router.push('/catalogo'); setIsOpen(false) },
+      presente: () => { router.push('/presente'); setIsOpen(false) },
+      admin_produtos: () => { router.push('/admin/produtos'); setIsOpen(false) },
+      admin_colecoes: () => { router.push('/admin/colecoes'); setIsOpen(false) },
+      admin_categorias: () => { router.push('/admin/categorias'); setIsOpen(false) },
+      admin_configuracoes: () => { router.push('/admin/configuracoes'); setIsOpen(false) },
     }
+    return acoes[acao]
   }
+
+  // Conversation State Machine Definitions - Computed from Firestore
+  const nodes: Record<string, Node> = melFluxo.length > 0 
+    ? melFluxo.reduce((acc, node) => {
+        if (!node.ativo) return acc
+        acc[node.id] = {
+          message: node.mensagem,
+          options: node.opcoes.map(op => ({
+            label: op.label,
+            icon: op.icone,
+            next: op.proximo,
+            action: op.acao ? resolveAcao(op.acao) : undefined
+          }))
+        }
+        return acc
+      }, {} as Record<string, Node>)
+    : fallbackNodes
 
   // --- Handlers ---
 
@@ -192,7 +154,7 @@ export const BeeAssistant = () => {
       return
     }
 
-    if (option.next) {
+    if (option.next && nodes[option.next]) {
       setIsTyping(true)
       setTimeout(() => {
         setIsTyping(false)
@@ -211,9 +173,11 @@ export const BeeAssistant = () => {
     if (isOpen) {
       const initialNode = isAdminMode ? 'admin_inicio' : 'inicio'
       setCurrentNode(initialNode)
-      setChatHistory([{ role: 'assistant', text: nodes[initialNode].message, id: Date.now() }])
+      if (nodes[initialNode]) {
+        setChatHistory([{ role: 'assistant', text: nodes[initialNode].message, id: Date.now() }])
+      }
     }
-  }, [isOpen, isAdminMode])
+  }, [isOpen, isAdminMode, nodes])
 
   // Contextual Greetings logic
   useEffect(() => {

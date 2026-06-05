@@ -231,6 +231,149 @@ const seed = async () => {
     }, { merge: true });
     console.log("✅ Configurações migradas!");
 
+    // 5. Migrar Fluxo da Mel
+    console.log("🐝 Migrando fluxo da Mel...");
+    const melCol = collection(db, "mel_fluxo");
+    const initialMelFlow = [
+      {
+        id: "inicio",
+        mensagem: "Olá! Sou a Mel, assistente do Bee Ateliê! 🐝 Como posso te ajudar hoje?",
+        ativo: true,
+        admin: false,
+        opcoes: [
+          { id: "op1", icone: "🧶", label: "Ver nossos produtos", proximo: "produtos" },
+          { id: "op2", icone: "🎁", label: "Fazer uma encomenda", proximo: "encomenda" },
+          { id: "op3", icone: "📦", label: "Prazo e entrega", proximo: "prazo" },
+          { id: "op4", icone: "💬", label: "Falar com uma artesã", proximo: "contato" },
+        ]
+      },
+      {
+        id: "produtos",
+        mensagem: "Temos peças lindas feitas com muito amor! O que você está procurando?",
+        ativo: true,
+        admin: false,
+        opcoes: [
+          { id: "op1", icone: "🐾", label: "Animais e Pets", proximo: "catalogo" },
+          { id: "op2", icone: "👸", label: "Personagens", proximo: "catalogo" },
+          { id: "op3", icone: "🙏", label: "Religiosos", proximo: "catalogo" },
+          { id: "op4", icone: "🎀", label: "Quero uma surpresa!", proximo: "presente" },
+        ]
+      },
+      {
+        id: "catalogo",
+        mensagem: "Que ótimo gosto! Vou te levar direto para o nosso catálogo. 🌟",
+        ativo: true,
+        admin: false,
+        opcoes: [
+          { id: "op1", icone: "👀", label: "Ver catálogo completo", acao: "catalogo" },
+          { id: "op2", icone: "🔙", label: "Voltar ao início", proximo: "inicio" },
+        ]
+      },
+      {
+        id: "presente",
+        mensagem: "Deixa eu te ajudar a encontrar o presente perfeito! ✨",
+        ativo: true,
+        admin: false,
+        opcoes: [
+          { id: "op1", icone: "🎯", label: "Usar o buscador de presentes", acao: "presente" },
+          { id: "op2", icone: "🔙", label: "Voltar ao início", proximo: "inicio" },
+        ]
+      },
+      {
+        id: "encomenda",
+        mensagem: "Adoramos fazer peças personalizadas! Cada amigurumi é único e feito com carinho. 🧶 Como prefere continuar?",
+        ativo: true,
+        admin: false,
+        opcoes: [
+          { id: "op1", icone: "📱", label: "Chamar no WhatsApp", acao: "whatsapp" },
+          { id: "op2", icone: "🛍️", label: "Ver o catálogo primeiro", acao: "catalogo" },
+          { id: "op3", icone: "🔙", label: "Voltar ao início", proximo: "inicio" },
+        ]
+      },
+      {
+        id: "prazo",
+        mensagem: "Cada peça é feita à mão com muito carinho, por isso o prazo médio é de 7 a 15 dias úteis após a confirmação. 📦 Mais alguma dúvida?",
+        ativo: true,
+        admin: false,
+        opcoes: [
+          { id: "op1", icone: "📦", label: "Como funciona a entrega?", proximo: "entrega" },
+          { id: "op2", icone: "💬", label: "Falar com uma artesã", proximo: "contato" },
+          { id: "op3", icone: "🔙", label: "Voltar ao início", proximo: "inicio" },
+        ]
+      },
+      {
+        id: "entrega",
+        mensagem: "Enviamos para todo o Brasil pelos Correios e transportadoras parceiras. O frete é calculado no momento da encomenda! 🚚",
+        ativo: true,
+        admin: false,
+        opcoes: [
+          { id: "op1", icone: "🎁", label: "Quero fazer uma encomenda", proximo: "encomenda" },
+          { id: "op2", icone: "🔙", label: "Voltar ao início", proximo: "inicio" },
+        ]
+      },
+      {
+        id: "contato",
+        mensagem: "Nossas artesãs adoram conversar com você! Escolha como prefere falar:",
+        ativo: true,
+        admin: false,
+        opcoes: [
+          { id: "op1", icone: "📱", label: "WhatsApp", acao: "whatsapp" },
+          { id: "op2", icone: "📸", label: "Instagram", acao: "instagram" },
+          { id: "op3", icone: "🔙", label: "Voltar ao início", proximo: "inicio" },
+        ]
+      },
+      // Admin Nodes
+      {
+        id: "admin_inicio",
+        mensagem: "Olá! Sou a Mel, sua assistente do ateliê. 🐝\nPara onde quer ir?",
+        ativo: true,
+        admin: true,
+        opcoes: [
+          { id: "op1", icone: "🧶", label: "Gerenciar Produtos", acao: "admin_produtos" },
+          { id: "op2", icone: "📂", label: "Coleções", acao: "admin_colecoes" },
+          { id: "op3", icone: "🏷️", label: "Categorias", acao: "admin_categorias" },
+          { id: "op4", icone: "⚙️", label: "Configurações", acao: "admin_configuracoes" },
+          { id: "op5", icone: "💡", label: "Ver dicas rápidas", proximo: "admin_dicas" }
+        ]
+      },
+      {
+        id: "admin_dicas",
+        mensagem: "Aqui vão algumas dicas rápidas para o ateliê! ✨",
+        ativo: true,
+        admin: true,
+        opcoes: [
+          { id: "op1", icone: "⭐", label: "Como destacar produtos?", proximo: "admin_dica_destaque" },
+          { id: "op2", icone: "📱", label: "Atualizar WhatsApp", acao: "admin_configuracoes" },
+          { id: "op3", icone: "🔙", label: "Voltar", proximo: "admin_inicio" }
+        ]
+      },
+      {
+        id: "admin_dica_destaque",
+        mensagem: "Na página de Produtos, abra qualquer produto e ative a estrela de Destaque ⭐ — ele aparece automaticamente na seção principal da Home!",
+        ativo: true,
+        admin: true,
+        opcoes: [
+          { id: "op1", icone: "🧶", label: "Ir para Produtos", acao: "admin_produtos" },
+          { id: "op2", icone: "🔙", label: "Voltar", proximo: "admin_inicio" }
+        ]
+      }
+    ];
+
+    for (const node of initialMelFlow) {
+      const nodeDoc = doc(melCol, node.id);
+      const snap = await getDoc(nodeDoc);
+
+      if (!snap.exists()) {
+        await setDoc(nodeDoc, {
+          ...node,
+          criadoEm: serverTimestamp()
+        });
+        console.log(`✅ Nó Mel "${node.id}" criado.`);
+      } else {
+        console.log(`ℹ️ Nó Mel "${node.id}" já existe, pulando.`);
+      }
+    }
+
     console.log("✨ Migração concluída com sucesso!");
     process.exit(0);
   } catch (error) {
